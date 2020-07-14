@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.11.4/gitgraph.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <p style="margin: 20px"></p>
+  <canvas id="gitGraph" style="padding: 20px"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.11.4/gitgraph.js"></script>
+  <script>
+  var myTemplateConfig = {
+    // colors: ["#008fb5", "#979797", "#f1c109", "#33cc33"],
+    colors: ["#bd0c21", "#f38126", "#b9229e", "#710bd3", "#2d6f05", "#0d7453", "#27f05c"],
+    branch: {
+      lineWidth: 3,
+      spacingX: 30,
+      labelRotation: 0
+    },
+    commit: {
+      spacingY: 40,
+      dot: {
+        size: 10
+      },    
+      message: {
+        displayAuthor: false,
+        displayBranch: true,
+        displayHash: false,
+        font: "normal 14pt Arial"
+      }
+    }
+  };
+  var myTemplate = new GitGraph.Template( myTemplateConfig );
+  
+  const graphContainer = document.getElementById("gitgraph");
+
+  var gitgraph = new GitGraph({
+    //template: "metro", // or blackarrow
+    orientation: "vertical-reverse",
+    author: "John Doe",
+    mode: "extended", // or compact if you don't want the messages
+    template: myTemplate
+  });
+  
+  const master = gitgraph.branch("master");
+  
+  master.commit("random bumf");
+  master.commit("making work for joe");
+  master.commit("Init the project");
+        
+  //var devBranch = master.branch("Make Dev Branch");
+  var bugfixBranchAug = master.branch("Make August Bugfix branch");
+  
+  var featureSmiles = master.branch("SMILES_branch");
+  var featureOutcomes = master.branch("Outcomes_branch");
+  var featureCSV = master.branch("CSV_branch");
+  
+  bugfixBranchAug.commit("Fix an annoyance");
+
+  featureSmiles.commit("Start of new Feature Smiles Work");
+  featureOutcomes.commit("Start of new Feature Outcomes Work");
+  featureCSV.commit("Start of new Feature CSV Work");
+  
+  //{message: "Release of version 0.1", tag: "0.1", author: "John Releaser", sha1: "abcdef0"}
+  bugfixBranchAug.commit("Fix that bad things happenening");
+
+  featureSmiles.commit("smiles work");
+  featureSmiles.commit("smiles work 2");   
+  featureSmiles.merge(master, "We got a feature out (smiles)");
+  master.tag("R2.7.0");
+  
+  bugfixBranchAug.commit("Fix that bad things happenening");
+  bugfixBranchAug.commit("Fix that bad things happenening");
+  bugfixBranchAug.commit("Fix that bad things happenening");
+
+  featureCSV.commit("Updating");
+  featureCSV.commit("Changing");
+  featureCSV.commit("Praying");
+  featureCSV.merge(master, "We got a feature out (CSV)");
+  master.tag("R2.8.0");
+
+  bugfixBranchAug.commit("Fix that bad things happenening");
+
+  featureOutcomes.commit("Meh");
+  featureOutcomes.commit("Plarp");
+  featureOutcomes.commit("Mork");
+  featureOutcomes.commit("Mindy");
+  featureOutcomes.merge(master, "We got a feature out (Outcomes)");
+  master.tag("R2.9.0");
+    
+  //bugfixBranchAug.merge(devBranch, "We got a feature out (Outcomes)");
+  bugfixBranchAug.tag("R2.9.1");
+  bugfixBranchAug.merge(master, "Putting fixes to master");
+  
+  var bugfixBranchSep = master.branch("Make Septmber Bugfix branch");
+  bugfixBranchSep.commit("Fix that bad things happenening");
+
+  </script>
+</body>
+</html>
