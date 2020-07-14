@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.11.4/gitgraph.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <p style="margin: 20px"></p>
+  <canvas id="gitGraph" style="padding: 20px"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.11.4/gitgraph.js"></script>
+  <script>
+  var myTemplateConfig = {
+    // colors: ["#008fb5", "#979797", "#f1c109", "#33cc33"],
+    colors: ["#FF0000", "#00FF00", "#0000FF"],
+    branch: {
+      lineWidth: 3,
+      spacingX: 30,
+      labelRotation: 0
+    },
+    commit: {
+      spacingY: 40,
+      dot: {
+        size: 10
+      },
+      message: {
+        displayAuthor: false,
+        displayBranch: true,
+        displayHash: false,
+        font: "normal 14pt Arial"
+      }
+    }
+  };
+  var myTemplate = new GitGraph.Template( myTemplateConfig );
+
+  const graphContainer = document.getElementById("gitgraph");
+  var gitgraph = new GitGraph({
+    template: "metro", // or blackarrow
+    orientation: "vertical",
+    author: "John Doe",
+    mode: "extended", // or compact if you don't want the messages
+    template: myTemplate
+  });
+  var master = gitgraph.branch("master");
+
+
+  gitgraph.commit("My first commit"); // 1 commit upon HEAD
+  var develop = gitgraph.branch("develop"); // New branch from HEAD
+  
+  var myfeature = develop.branch("myfeature"); // New branch from develop
+  develop.commit("Develop a feature - part 1");
+  develop.commit("Develop a feature - part 2");
+
+  master.commit({message: "Fast bugfix", author: "John Fixer"});
+  myfeature.commit({message: "New cool feature", author: "John Feature"});
+
+  develop.merge(master);
+  myfeature.merge(master);
+  master.commit({message: "Release of version 0.1", tag: "0.1", author: "John Releaser", sha1: "abcdef0"});
+    
+  </script>
+</body>
+</html>

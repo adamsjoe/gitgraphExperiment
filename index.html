@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.11.4/gitgraph.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <p style="margin: 20px"></p>
+  <canvas id="gitGraph" style="padding: 20px"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.11.4/gitgraph.js"></script>
+  <script>
+  var myTemplateConfig = {
+    // colors: ["#008fb5", "#979797", "#f1c109", "#33cc33"],
+    colors: ["#bd0c21", "#f38126", "#b9229e", "#710bd3", "#2d6f05", "#0d7453", "#27f05c"],
+    branch: {
+      lineWidth: 3,
+      spacingX: 30,
+      labelRotation: 0
+    },
+    commit: {
+      spacingY: 40,
+      dot: {
+        size: 10
+      },
+      message: {
+        displayAuthor: false,
+        displayBranch: true,
+        displayHash: false,
+        font: "normal 14pt Arial"
+      }
+    }
+  };
+  var myTemplate = new GitGraph.Template( myTemplateConfig );
+  
+  const graphContainer = document.getElementById("gitgraph");
+
+  var gitgraph = new GitGraph({
+    template: "metro", // or blackarrow
+    orientation: "vertical",
+    author: "John Doe",
+    mode: "extended", // or compact if you don't want the messages
+    template: myTemplate
+  });
+  
+  const master = gitgraph.branch("master");
+       
+  master.commit("Init the project");
+        
+  var devBranch = master.branch("Make Dev Branch")
+  var bugfixBranchAug = devBranch.branch("Make the bugfixAugust2020 from develop");
+  var featureSmiles = devBranch.branch("Make the DIG-123: SMILES branch from develop");
+  var featureOutcomes = devBranch.branch("Make the DIG-124: Run Outcomes branch from develop");
+  var featureCSV = devBranch.branch("Make the DIG-125: CSV Stuff branch from develop");
+
+   
+  featureSmiles.commit("Start of new Feature Work")
+  featureOutcomes.commit("Start of new Feature Work")
+  featureCSV.commit("Start of new Feature Work")
+  //{message: "Release of version 0.1", tag: "0.1", author: "John Releaser", sha1: "abcdef0"}
+  bugfixBranchAug.commit({message: "Fix that bad things happenening", author: "John Releaser", sha1: "abcdef0"})
+
+  featureSmiles.commit("features work")
+  featureSmiles.commit("features work")    
+  featureSmiles.merge(devBranch, "We got a feature out");
+  devBranch.tag("R2.7.0")
+  devBranch.merge(master, "merging to master")
+
+  bugfixBranchAug.commit("bug fix work")
+  bugfixBranchAug.commit("bug fix work")
+  bugfixBranchAug.commit("bug fix work")
+
+
+  featureOutcomes.commit("outcomes work")
+  featureOutcomes.commit("outcomes work")
+  featureOutcomes.commit("outcomes work")
+  featureOutcomes.commit("outcomes work")
+  featureOutcomes.commit("outcomes work")
+
+  bugfixBranchAug.commit("another bug fixed")
+  
+  featureOutcomes.merge(devBranch, "We got a feature out");
+  featureOutcomes.tag("R2.8.0")
+  devBranch.merge(master, "merging to master")
+
+  featureCSV.commit("CSV work")
+  featureCSV.commit("CSV work")
+  featureCSV.commit("CSV work")
+  featureCSV.commit("CSV work")
+  featureCSV.commit("CSV work")
+  bugfixBranchAug.commit("more bugs being squished")
+  featureCSV.commit("CSV work")
+  featureCSV.commit("CSV work")
+  featureCSV.merge(devBranch, "We got a feature out");
+  featureCSV.tag("R2.9.0")
+  devBranch.merge(master, "merging to master")
+  
+  bugfixBranchAug.commit("squishing")
+  bugfixBranchAug.commit("squishing")
+  bugfixBranchAug.commit("squishing")
+  bugfixBranchAug.commit("squishing")
+  bugfixBranchAug.commit("squishing")
+  bugfixBranchAug.merge(devBranch, "merge in bugfixes")   
+  bugfixBranchAug.tag("2.9.1")
+  devBranch.merge(master, "merging to master")
+  
+  var superCoolFature = devBranch.branch("DIG-666: Super Cool Feature");
+  var bugfixSeptember2020 = devBranch.branch("bugfixSeptember2020");
+  bugfixSeptember2020.commit("squishing")
+  superCoolFature.commit("Start of new Feature Work")
+  superCoolFature.commit("super new feature")
+    
+  </script>
+</body>
+</html>
